@@ -1,0 +1,29 @@
+<!--
+  Generated template for the OtherBeneficiariesPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="deep-blue">
+    <ion-title>Beneficiaries</ion-title>
+  </ion-navbar>
+
+</ion-header>
+<ion-content padding>
+    <ion-list>
+      <ion-item-sliding *ngFor="let ben of Benefs">
+        <ion-item (click)="populateFields(ben.id)">
+            <p color="deep-blue" style="font-size:20px">{{ ben.acc_name }}</p>
+          <small class="gray-text right-align">{{ ben.bank }} - {{ ben.iban }}</small>
+        </ion-item>
+        <ion-item-options side="left">
+          <button ion-button color="deep-blue" (click)="delOthBen(ben.iban)">
+            <ion-icon name="trash"></ion-icon>
+            Delete
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+</ion-content>

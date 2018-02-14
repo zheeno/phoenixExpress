@@ -1,0 +1,53 @@
+<!--
+  Generated template for the Transfer3Page page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="deep-blue">
+    <ion-title>Wire funds to other banks</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+        <ion-label floating color="deep-blue">Bank Name</ion-label>
+        <ion-input type="text" [(ngModel)]="bank" color="deep-blue"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label floating color="deep-blue">Account Holder's Full Name</ion-label>
+        <ion-input type="text" [(ngModel)]="accName" color="deep-blue"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label floating color="deep-blue">Account No./IBAN</ion-label>
+        <ion-input type="text" [(ngModel)]="iban" color="deep-blue"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label floating color="deep-blue">SWIFTBIC</ion-label>
+        <ion-input type="text" [(ngModel)]="swiftBIC" color="deep-blue"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label floating color="deep-blue">Amount ($)</ion-label>
+        <ion-input type="text" [(ngModel)]="amount" color="deep-blue"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label floating color="deep-blue">Transaction Notes</ion-label>
+        <ion-input type="text" [(ngModel)]="notes" color="deep-blue"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label for="#benRadio2" stacked left-align (click)="togBenSave()">
+        Save as beneficiary
+      </ion-label>
+      <ion-checkbox #benRadio2 color="deep-blue" (click)="togBenSave()"></ion-checkbox>        
+    </ion-item>
+    <ion-item class="pad-top-25">
+        <button ion-button block color="deep-blue" default (click)="wireOthBankPrompt()">Transfer</button>
+        <button ion-button outline color="deep-blue" block default icon-left (click)="beneficiaries()">
+            <ion-icon name="list"></ion-icon>
+            Beneficiaries
+          </button>
+      </ion-item>
+  </ion-list>
+</ion-content>

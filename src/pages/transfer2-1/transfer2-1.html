@@ -1,0 +1,42 @@
+<!--
+  Generated template for the Transfer2_1Page page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color="deep-blue">
+    <ion-title ion-nowrap>Confirm funds transfer</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content padding>
+  <ion-list *ngFor="let dat of data">
+      <ion-item>
+        <ion-label floating color="deep-blue">Account Name</ion-label>
+        <ion-input type="hidden" [(ngModel)]="dat.id"></ion-input>
+        <ion-input type="text" [(ngModel)]="dat.acc_name" disabled></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating color="deep-blue">Account No.</ion-label>
+        <ion-input type="number" [(ngModel)]="dat.acc_no" disabled></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating color="deep-blue">Amount ($)</ion-label>
+        <ion-input type="text" [(ngModel)]="wire.amount" color="deep-blue"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating color="deep-blue">Transaction Notes</ion-label>
+        <ion-input type="text" [(ngModel)]="wire.notes" color="deep-blue" ion-nowrap></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label for="#benRadio" stacked left-align (click)="togBenSave()">
+          Save as beneficiary
+        </ion-label>
+        <ion-checkbox #benRadio color="deep-blue" (click)="togBenSave()"></ion-checkbox>        
+      </ion-item>
+      <ion-item class="pad-top-25">
+        <button ion-button block color="deep-blue" default (click)="wireSmBankPrompt()">Transfer</button>
+        <button ion-button block outline color="deep-blue" default (click)="goBack()">Cancel</button>
+      </ion-item>
+  </ion-list>
+</ion-content>

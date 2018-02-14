@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-navbar color="deep-blue">
+    <ion-title>
+        History
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-list-header (click)="getAllTransactions()">Transaction History</ion-list-header>
+
+    <ion-item *ngFor="let mytransaction of myTransactions" text-wrap>
+        <div class="left-align" style="font-size:20px;color:#f53d3d">{{ mytransaction.credit === "0.00" ? "$"+mytransaction.debit : null }}</div>
+        <div class="right-align" style="font-size:20px;color:#32db64">{{ mytransaction.debit === "0.00" ? "$"+mytransaction.credit : null }}</div>
+      <div [innerHTML]="mytransaction.notes"></div>
+      <div class="gray-text right-align">{{ mytransaction.date_time }}</div>
+      </ion-item>
+
+  </ion-list>
+</ion-content>

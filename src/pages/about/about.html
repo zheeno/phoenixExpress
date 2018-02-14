@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-navbar color="deep-blue">
+    <ion-title>
+      Transfers
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h3>Select Beneficiary</h3>
+  <ion-list no-margin>
+      <ion-item text-capitalize text-wrap (click)="transferToMyAcc()">One of your Phoenix Express accounts</ion-item>
+      <ion-item text-capitalize text-wrap (click)="transferSameBank()">Other Phoenix Express accounts</ion-item>
+      <ion-item text-capitalize text-wrap (click)="transferOtherBank()">Other bank accounts</ion-item>
+  </ion-list>
+</ion-content>

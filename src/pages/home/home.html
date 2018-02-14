@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar color="deep-blue">
+    <ion-title>Accounts</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="bg-grey-light" col-12 text-center *ngFor="let Acc of myAccount">
+        <h1 text-capitalize>{{ Acc.acc_name }}</h1>
+        <h3>${{ myBalance }}</h3>
+        <h5>{{ Acc.acc_no }}</h5>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-list>
+    <ion-list-header><label (click)="getRecentTransactions()">Most Recent Transactions</label></ion-list-header>
+    <ion-item *ngFor="let transaction of transactions" text-wrap>
+        <div class="left-align" style="font-size:20px;color:#f53d3d">{{ transaction.credit === "0.00" ? "$"+transaction.debit : null }}</div>
+        <div class="right-align" style="font-size:20px;color:#32db64">{{ transaction.debit === "0.00" ? "$"+transaction.credit : null }}</div>
+      <div [innerHTML]="transaction.notes"></div>
+      <div class="gray-text right-align">{{ transaction.date_time }}</div>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,8 @@
+{
+  "name": "phoenixAppBeta",
+  "app_id": "271d2fb2",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
