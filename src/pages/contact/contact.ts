@@ -21,12 +21,18 @@ export class ContactPage {
   
   //get most recent transactions //
   getAllTransactions(){
-    console.log(this.account);
-    this.transactService.postData(this.account[0], "getAllTrans")
-    .then(result => {
-        this.myTransactions = result;
-    }, (err) => {
-      this.myTransactions.showAlert("Connection Error", "Please check your internet settings");
+    let loader = this.transactService.loadingCtrl.create({
+    content: "Please wait..."
+    });
+    this.transactService.presentLoading("show",loader).then(()=>{
+      this.transactService.postData(this.account[0], "getAllTrans")
+      .then(result => {
+          this.transactService.presentLoading("dismiss",loader);
+          this.myTransactions = result;
+      }, (err) => {
+        this.transactService.presentLoading("dismiss",loader);
+        this.myTransactions.showAlert("Connection Error", "Please check your internet settings");
+      })
     })
   }
 

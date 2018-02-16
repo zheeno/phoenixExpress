@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { /*IonicPage,*/ NavController, NavParams } from 'ionic-angular';
 import { TransactionServiceProvider } from '../../providers/transaction-service/transaction-service'
 /**
  * 
@@ -9,7 +9,7 @@ import { TransactionServiceProvider } from '../../providers/transaction-service/
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+//@IonicPage()
 @Component({
   selector: 'page-transfer2-1',
   templateUrl: 'transfer2-1.html',
@@ -52,15 +52,10 @@ export class Transfer2_1Page {
     ]
     }
     //verify that the amount to be transfered is greater than 0
-    if(this.wire.notes.toString.length > 0){
+    if(this.wire.amount > 0 && this.wire.notes.toString.length > 0){
       this.transactService.presentActionSheet(params);
     }else{
-      this.transactService.showAlert("Alert", "Please fill out the Transaction Notes field");
-    }
-    if(this.wire.amount > 0){
-      this.transactService.presentActionSheet(params);
-    }else{
-      this.transactService.showAlert("Alert", "Invalid amount entered");
+      this.transactService.showAlert("Alert", "Please fill out all required fields");
     }
   }
 
@@ -78,27 +73,34 @@ export class Transfer2_1Page {
       token: this.wire.token,
       saveBen: temp
     }
+    let loader = this.transactService.loadingCtrl.create({
+      content: "Please wait..."
+    });
     console.log(wireParams); //
-    this.transactService.postData(wireParams, "transferSmBnkNow")
-    .then(result => {
-        this.wireStatus = result;
-        if(this.wireStatus.length == 0){
-          this.transactService.showAlert("Alert", "Error encountered");
-        }
-        else if(this.wireStatus.status == "404" || this.wireStatus.status == "405"){
-          this.transactService.showAlert("Alert", this.wireStatus.Description);
-        }
-        else if(this.wireStatus.status == "200"){
-          this.transactService.showAlert("Success", this.wireStatus.Description);
-         this.transactService.setAccountBalance(this.wireStatus.balance);
-         this.transactService.getRecentTransactions();
-          setTimeout(()=>{
-            this.goBack();
-          },3000);
-        }
-    }, (err) => {
-      //alert error
-      this.transactService.showAlert("Connection Error", "Please check your internet settings");
+    this.transactService.presentLoading("show",loader).then(()=>{
+      this.transactService.postData(wireParams, "transferSmBnkNow")
+      .then(result => {
+          this.transactService.presentLoading("dismiss",loader);
+          this.wireStatus = result;
+          if(this.wireStatus.length == 0){
+            this.transactService.showAlert("Alert", "Error encountered");
+          }
+          else if(this.wireStatus.status == "404" || this.wireStatus.status == "405"){
+            this.transactService.showAlert("Alert", this.wireStatus.Description);
+          }
+          else if(this.wireStatus.status == "200"){
+            this.transactService.showAlert("Success", this.wireStatus.Description);
+            this.transactService.setAccountBalance(this.wireStatus.balance);
+            this.transactService.getRecentTransactions();
+            setTimeout(()=>{
+              this.goBack();
+            },3000);
+          }
+      }, (err) => {
+        //alert error
+        this.transactService.presentLoading("dismiss",loader);
+        this.transactService.showAlert("Connection Error", "Please check your internet settings");
+      })
     })
   }
   

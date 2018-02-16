@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { /*IonicPage,*/ NavController, NavParams } from 'ionic-angular';
 import { TransactionServiceProvider } from '../../providers/transaction-service/transaction-service';
 import { Transfer3Page } from '../../pages/transfer3/transfer3';
 
@@ -10,7 +10,7 @@ import { Transfer3Page } from '../../pages/transfer3/transfer3';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+//@IonicPage()
 @Component({
   selector: 'page-other-beneficiaries',
   templateUrl: 'other-beneficiaries.html',
@@ -35,6 +35,10 @@ export class OtherBeneficiariesPage {
   }
 
   delOthBen(acc_no){
+    let loader = this.transactService.loadingCtrl.create({
+      content: "Please wait..."
+    });
+    this.transactService.presentLoading("show",loader).then(()=>{
       this.transactService.postData({"user_id":this.transactService.account.user_id, "acc_no": acc_no}, "delOthBenef")
       .then(result => {
         this.Benefs = result;
@@ -43,8 +47,11 @@ export class OtherBeneficiariesPage {
           }
         }, (err) => {
         //alert error
+        this.transactService.presentLoading("dismiss",loader);
         this.transactService.showAlert("Connection Error", "Please check your internet settings");
-      })  }
+      })
+    })
+  }
 
 }
 

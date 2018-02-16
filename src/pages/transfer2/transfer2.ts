@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { /*IonicPage,*/ NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -15,7 +15,7 @@ import { Transfer2_1Page } from '../../pages/transfer2-1/transfer2-1';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+//@IonicPage()
 @Component({
   selector: 'page-transfer2',
   templateUrl: 'transfer2.html',
@@ -39,40 +39,54 @@ export class Transfer2Page {
   }
 
   beneficiaries(){ //...check for beneficiaries within the bank
-    this.transactService.postData({"user_id":this.transactService.account.user_id}, "showBenef")
-    .then(result => {
-      this.benefs = result;
-      console.log(this.benefs.length)
-        if(this.benefs.length == 0){
-          this.transactService.showAlert("Info", "There are no beneficiaries associated with this account");
-        }else{
-          //navigate to beneficiaries page 
-          console.log(this.benefs)
-            this.navCtrl.push(BeneficiariesPage, {"benefs": this.benefs});
-        }
-      }, (err) => {
-      //alert error
-      this.transactService.showAlert("Connection Error", "Please check your internet settings");
+    let loader = this.transactService.loadingCtrl.create({
+      content: "Please wait..."
+    });
+    this.transactService.presentLoading("show",loader).then(()=>{
+      this.transactService.postData({"user_id":this.transactService.account.user_id}, "showBenef")
+      .then(result => {
+          this.transactService.presentLoading("dismiss",loader);
+          this.benefs = result;
+          console.log(this.benefs.length)
+          if(this.benefs.length == 0){
+            this.transactService.showAlert("Info", "There are no beneficiaries associated with this account");
+          }else{
+            //navigate to beneficiaries page 
+            console.log(this.benefs)
+              this.navCtrl.push(BeneficiariesPage, {"benefs": this.benefs});
+          }
+        }, (err) => {
+        //alert error
+        this.transactService.presentLoading("dismiss",loader);
+        this.transactService.showAlert("Connection Error", "Please check your internet settings");
+      })
     })
   }
 
 
   verifyAccount(){
     if(this.destAccNo > 0 ){
-      this.transactService.postData({"acc_no": this.destAccNo, "token": localStorage.getItem("token")}, "verifyAcc")
-      .then(result => {
+      let loader = this.transactService.loadingCtrl.create({
+        content: "Please wait..."
+      });
+      this.transactService.presentLoading("show",loader).then(()=>{
+        this.transactService.postData({"acc_no": this.destAccNo, "token": localStorage.getItem("token")}, "verifyAcc")
+        .then(result => {
+          this.transactService.presentLoading("dismiss",loader);
           this.temp = result;
-          this.verified = this.temp;
-          console.log(this.verified[0])
-          if(this.verified[0].status == 0){
-          this.transactService.showAlert("Invalid Account", "Account does not exist.<br>Please try again with a valid Phoenix Express account number.");
-          }else{
-            this.navCtrl.push(Transfer2_1Page, { "data": this.verified });
-          }
-        }, (err) => {
-        //alert error
-        this.transactService.showAlert("Connection Error", "Please check your internet settings");
-      })
+            this.verified = this.temp;
+            console.log(this.verified[0])
+            if(this.verified[0].status == 0){
+            this.transactService.showAlert("Invalid Account", "Account does not exist.<br>Please try again with a valid Phoenix Express account number.");
+            }else{
+              this.navCtrl.push(Transfer2_1Page, { "data": this.verified });
+            }
+          }, (err) => {
+          //alert error
+          this.transactService.presentLoading("dismiss",loader);
+          this.transactService.showAlert("Connection Error", "Please check your internet settings");
+        })
+     })
     }else{
         //alert user
         this.transactService.showAlert("Alert", "Please provide a valid account number");

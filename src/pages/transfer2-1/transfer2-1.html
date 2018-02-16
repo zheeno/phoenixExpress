@@ -35,8 +35,13 @@
         <ion-checkbox #benRadio color="deep-blue" (click)="togBenSave()"></ion-checkbox>        
       </ion-item>
       <ion-item class="pad-top-25">
-        <button ion-button block color="deep-blue" default (click)="wireSmBankPrompt()">Transfer</button>
-        <button ion-button block outline color="deep-blue" default (click)="goBack()">Cancel</button>
+        <button ion-button block color="deep-blue" icon-left default (click)="wireSmBankPrompt()">
+            <ion-icon name="swap"></ion-icon>
+            Transfer
+        </button>
+        <button ion-button block outline color="deep-blue" icon-left default (click)="goBack()">
+            <ion-icon name="close"></ion-icon>
+            Cancel</button>
       </ion-item>
   </ion-list>
 </ion-content>

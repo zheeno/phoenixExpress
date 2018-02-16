@@ -15,11 +15,18 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 /* Your custom styles */
+.transparent{
+	background: none;
+}
+
 .right-align{
 	text-align: right !important;
 }
 .left-align{
 	text-align: left;
+}
+.bg-deep-blue-gradient{
+	background: linear-gradient(to bottom,#263444, #293d7a );
 }
 .center-align{
 	text-align: center;
@@ -92,6 +99,12 @@
 	border-radius: 100px !important;
 	width: 65px;
 	height: 65px
+}
+.img-circle{
+	border-radius: 110px !important;
+	width: 110px;
+	height: 110px;
+	opacity: 0.9;
 }
 .uppercase{
 	text-transform: uppercase !important;

@@ -6,10 +6,9 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h3>Select Beneficiary</h3>
-  <ion-list no-margin>
-      <ion-item text-capitalize text-wrap (click)="transferToMyAcc()">One of your Phoenix Express accounts</ion-item>
+<ion-content padding class="bg-deep-blue-gradient">
+  <ion-list margin>
+      <ion-item text-capitalize text-wrap (click)="transferToMyAcc()">One of your accounts</ion-item>
       <ion-item text-capitalize text-wrap (click)="transferSameBank()">Other Phoenix Express accounts</ion-item>
       <ion-item text-capitalize text-wrap (click)="transferOtherBank()">Other bank accounts</ion-item>
   </ion-list>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { /*IonicPage,*/ NavController, NavParams } from 'ionic-angular';
 import { TransactionServiceProvider } from '../../providers/transaction-service/transaction-service';
 import { OtherBeneficiariesPage } from '../other-beneficiaries/other-beneficiaries';
 
@@ -10,7 +10,7 @@ import { OtherBeneficiariesPage } from '../other-beneficiaries/other-beneficiari
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+//@IonicPage()
 @Component({
   selector: 'page-transfer3',
   templateUrl: 'transfer3.html',
@@ -61,28 +61,34 @@ export class Transfer3Page {
     saveBen: temp, 
     token: this.transactService.account.token,
     }
+    let loader = this.transactService.loadingCtrl.create({
+      content: "Please wait..."
+    });
     console.log(intWire);
-
-    this.transactService.postData(intWire, "transferOthBnkNow")
-    .then(result => {
-        this.wireStatus = result;
-        if(this.wireStatus.length == 0){
-          this.transactService.showAlert("Alert", "Error encountered");
-        }
-        else if(this.wireStatus.status == "404" || this.wireStatus.status == "405"){
-          this.transactService.showAlert("Alert", this.wireStatus.Description);
-        }
-        else if(this.wireStatus.status == "200"){
-          this.transactService.showAlert("Success", this.wireStatus.Description);
-         this.transactService.setAccountBalance(this.wireStatus.balance);
-         this.transactService.getRecentTransactions();
-          setTimeout(()=>{
-            this.goBack();
-          },3000);
-        }
-    }, (err) => {
-      //alert error
-      this.transactService.showAlert("Connection Error", "Please check your internet settings");
+    this.transactService.presentLoading("show",loader).then(()=>{      
+      this.transactService.postData(intWire, "transferOthBnkNow")
+      .then(result => {
+          this.wireStatus = result;
+          this.transactService.presentLoading("dismiss",loader);
+          if(this.wireStatus.length == 0){
+            this.transactService.showAlert("Alert", "Error encountered");
+          }
+          else if(this.wireStatus.status == "404" || this.wireStatus.status == "405"){
+            this.transactService.showAlert("Alert", this.wireStatus.Description);
+          }
+          else if(this.wireStatus.status == "200"){
+            this.transactService.showAlert("Success", this.wireStatus.Description);
+            this.transactService.setAccountBalance(this.wireStatus.balance);
+            this.transactService.getRecentTransactions();
+            setTimeout(()=>{
+              this.goBack();
+            },3000);
+          }
+      }, (err) => {
+        //alert error
+        this.transactService.presentLoading("dismiss",loader);
+        this.transactService.showAlert("Connection Error", "Please check your internet settings");
+      })
     })
   }
 
@@ -102,33 +108,35 @@ export class Transfer3Page {
     ]
     }
     //verify that the amount to be transfered is greater than 0
-    if(this.notes.toString.length > 0){
+    if(this.notes.toString.length > 0 && this.amount > 0){
       this.transactService.presentActionSheet(params);
     }else{
-      this.transactService.showAlert("Alert", "Please fill out the Transaction Notes field");
-    }
-    if(this.amount > 0){
-      this.transactService.presentActionSheet(params);
-    }else{
-      this.transactService.showAlert("Alert", "Invalid amount entered");
+      this.transactService.showAlert("Alert", "Please fill all required fields");
     }
   }
 
   beneficiaries(){//...check for beneficiaries for other banks
-    this.transactService.postData({"user_id": this.transactService.account.user_id}, "showOtheBenef")
-    .then(result => {
-      this.benefs = result;
-        if(this.benefs.length == 0){
-          this.transactService.showAlert("Info", "There are no beneficiaries associated with this account");
-        }else{
-          //navigate to beneficiaries page 
-          console.log(this.benefs)
-            this.navCtrl.push(OtherBeneficiariesPage, {"benefs": this.benefs});
-        }
-      }, (err) => {
-      //alert error
-      this.transactService.showAlert("Connection Error", "Please check your internet settings");
-    })
+    let loader = this.transactService.loadingCtrl.create({
+      content: "Please wait..."
+    });
+    this.transactService.presentLoading("show",loader).then(()=>{ 
+      this.transactService.postData({"user_id": this.transactService.account.user_id}, "showOtheBenef")
+      .then(result => {
+        this.transactService.presentLoading("dismiss",loader);
+          this.benefs = result;
+          if(this.benefs.length == 0){
+            this.transactService.showAlert("Info", "There are no beneficiaries associated with this account");
+          }else{
+            //navigate to beneficiaries page 
+            console.log(this.benefs)
+              this.navCtrl.push(OtherBeneficiariesPage, {"benefs": this.benefs});
+          }
+        }, (err) => {
+        //alert error
+        this.transactService.presentLoading("dismiss",loader);
+        this.transactService.showAlert("Connection Error", "Please check your internet settings");
+      })
+    });
   }
 
   togBenSave(){

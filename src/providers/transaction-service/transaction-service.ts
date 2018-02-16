@@ -5,11 +5,11 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import 'rxjs/add/operator/map';
 
 
-let apiUrl = "http://192.168.43.1/phoenixExpress/app/api/"; //http://www.phoenixexpress.org/app/api/
+let apiUrl = "http://192.168.178.20/phoenixExpress/app/api/"; //http://www.phoenixexpress.org/app/api/
 @Injectable()
 export class TransactionServiceProvider {
 
-  private myAccBalance  = new BehaviorSubject<string>("0.00"); //for storing the user's account balance
+  private myAccBalance  = new BehaviorSubject<string>(""); //for storing the user's account balance
   castBal = this.myAccBalance.asObservable();
 
   private myAccount = new BehaviorSubject<any>(""); //for storing the user's accout info
@@ -22,6 +22,7 @@ export class TransactionServiceProvider {
   account: any;
   myBalance: any;
   verified: any;
+
   constructor(
      public loadingCtrl: LoadingController,
      public http: Http,
@@ -37,38 +38,60 @@ export class TransactionServiceProvider {
 
   //get account details
   getAccountData(){
-    this.postData(this.account, "getAcc")
-    .then(result => {
+    let loader = this.loadingCtrl.create({
+      content: "Please wait..."
+    });
+
+    this.presentLoading("show",loader).then(()=>{
+      this.postData(this.account, "getAcc")
+      .then(result => {
+        this.presentLoading("dismiss",loader);
         this.myAccount.next(result);
-        this.getAccountBalance();        
-    }, (err) => {
-      this.showAlert("Connection Error", "Please check your internet settings");
+          this.getAccountBalance();        
+      }, (err) => {
+        this.presentLoading("dismiss",loader);
+        this.showAlert("Connection Error", "Please check your internet settings");
+      })
     })
   }
 
   //get account balance
   getAccountBalance(){
-    this.postData(this.account, "getAccBal")
-    .then(result => {
+    let loader = this.loadingCtrl.create({
+      content: "Please wait..."
+    });
+
+    this.presentLoading("show",loader).then(()=>{
+      this.postData(this.account, "getAccBal").then(result => {
+        this.presentLoading("dismiss",loader);
         this.myBalance = result;
         this.myAccBalance.next(this.myBalance.balance);
         this.getRecentTransactions();
-    }, (err) => {
-      this.showAlert("Connection Error", "Please check your internet settings");
+      }, (err) => {
+        this.presentLoading("dismiss",loader);
+        this.showAlert("Connection Error", "Please check your internet settings");
+      })
     })
   }
   //get most recent transactions
   getRecentTransactions(){
-    this.postData(this.account, "getTrans")
-    .then(result => {
+    let loader = this.loadingCtrl.create({
+      content: "Please wait..."
+    });
+
+    this.presentLoading("show",loader).then(()=>{
+      this.postData(this.account, "getTrans")
+      .then(result => {
+        this.presentLoading("dismiss",loader);
         this.transactions.next(result);
-    }, (err) => {
-      this.showAlert("Connection Error", "Please check your internet settings");
+        }, (err) => {
+        this.presentLoading("dismiss",loader);
+        this.showAlert("Connection Error", "Please check your internet settings");
+      })
     })
   }
 
   postData(content, command){
-    this.presentLoading("show");
     return new Promise((resolve, reject) => {
       let headers = new Headers();
       this.http.post(apiUrl+command, JSON.stringify(content), { headers: headers })
@@ -88,15 +111,12 @@ export class TransactionServiceProvider {
     });
     alert.present();
   }
-
-  presentLoading(action) {
-    let loader = this.loadingCtrl.create({
-      content: "Please wait...",
-      duration: 3000,
-      showBackdrop: false,
-      cssClass: "bg-grey-light see-through"
-    });
-    loader.present();
+  presentLoading(action, loader_name) {
+    if(action == "show"){
+      return loader_name.present();
+    }else{
+      return loader_name.dismiss();
+    }
   }
 
     presentActionSheet(params) {

@@ -13,23 +13,27 @@
 </ion-header>
 
 
-<ion-content padding>
-  <ion-list>
-    <ion-item class="center-align">
-        <img src="../../assets/imgs/phoenixExpress.png">
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Internet Banking Id</ion-label>
-      <ion-input type="text" [(ngModel)]="bankingId"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Password</ion-label>
-      <ion-input type="password" [(ngModel)]="password"></ion-input>
-    </ion-item>
-    <ion-item>
-      <button ion-button block default color="deep-blue" (click)="login()">Login</button>
-    </ion-item>
-  </ion-list>
+<ion-content padding class="bg-deep-blue-gradient">
+    <ion-list class="transparent">
+      <ion-item class="center-align transparent">
+          <img src="../../assets/imgs/phoenixExpress.png" class="img-circle">
+      </ion-item>
+      </ion-list>
+  <ion-card style="opacity:0.9">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Internet Banking Id</ion-label>
+        <ion-input type="text" [(ngModel)]="bankingId"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input type="password" [(ngModel)]="password"></ion-input>
+      </ion-item>
+      <ion-item>
+        <button ion-button block default color="deep-blue" (click)="login()">Login</button>
+      </ion-item>
+    </ion-list>
+  </ion-card>
 </ion-content>
 <ion-footer>
   <ion-toolbar class="center-align">
